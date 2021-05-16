@@ -11,9 +11,9 @@ from nav_msgs.msg import OccupancyGrid
 # para correr paquete: "rosrun mi_paquete_2 mi_nodo.py"
 
 # variables globales
-dimension_x = 3#1000 Puse 3 para no explotar la consola
-dimension_y = 3#1000
-resolucion = 0.1 #celdas de 10cm
+dimension_x = 20#1000 Puse 3 para no explotar la consola
+dimension_y = 20#1000
+resolucion = 0.05 #celdas de 10cm
 
 x = 0
 y = 0
@@ -28,6 +28,7 @@ def my_timer_callback(self, event=None):
     str = "pos x={}, pos y={}, pot={}".format(y,x,potencia)
     
     grilla.agregar_punto(potencia, x, y)
+    grilla.graficar()
     aux = grilla.grilla2occupancy_grid()
     rospy.loginfo(aux)
     map_pub.publish(aux)
