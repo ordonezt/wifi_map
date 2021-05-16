@@ -12,7 +12,7 @@ Ayudantes:
 - *Eduardo Granzella*
 
 
+Año: 2021
+
 ### Comandos para correr:
 `rosrun wifi_map mi_nodo.py`
-
-Año: 2021
