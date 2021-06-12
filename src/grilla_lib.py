@@ -19,7 +19,7 @@ class Grilla:
         #if (i, j) != (i_anterior, j_anterior):
         #if (i < self.dimension_x) and (j < self.dimension_y):
         if ((i >= 0) and (i < self.dimension_x)) and ((j >= 0) and (j < self.dimension_y)):  #POR QUE ESTO NO ANDA??
-            self.grilla[i, j] = potencia
+            self.grilla[i, j] = potencia2probability(potencia)
         #    (i_anterior, j_anterior) = (i, j)
 
     def grilla2occupancy_grid(self):
@@ -42,3 +42,21 @@ class Grilla:
 
 def posicion2indice(x, y, resolucion):
     return (int(x // resolucion), int(y // resolucion))
+
+def potencia2probability (potencia):
+    potencia_max=-10  #potencia maxima representable en dBm
+    potencia_min=-90 #potencia minima representable en dBm
+    rango_potencia = potencia_max - potencia_min
+    #trunco los valores posibles de potencia
+    if (potencia>potencia_max):
+        potencia=potencia_max
+    
+    if (potencia<potencia_min):
+        potencia=potencia_min
+    
+    #Escalo el rango de potencia de 0 100 
+    ## Donde 0 es la potencia maxima y 100 es la minima
+    potencia= potencia-potencia_min #
+    potencia= (potencia/rango_potencia) *100
+    potencia=100-potencia
+    return potencia

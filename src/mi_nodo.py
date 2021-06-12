@@ -27,7 +27,7 @@ def my_timer_callback(self, event=None):
 
     str = "pos x={}, pos y={}, pot={}".format(y,x,potencia)
     
-    grilla.agregar_punto(-potencia, y, x)
+    grilla.agregar_punto(potencia, y, x)
     #grilla.graficar()
     aux = grilla.grilla2occupancy_grid()
     rospy.loginfo(aux)
@@ -43,7 +43,10 @@ def callback_pos(msg):
 
 def callback_wifi(data):
     global potencia
-    potencia = data.router_info[0].signal_strength
+    try:
+        potencia = data.router_info[0].signal_strength
+    except:
+        potencia = -90
 
 def subscriptor_pos():
     rospy.Subscriber("/create1/odom",Odometry,callback_pos)
