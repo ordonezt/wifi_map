@@ -13,7 +13,7 @@ from nav_msgs.msg import OccupancyGrid
 # variables globales
 dimension_x = 20#1000 Puse 3 para no explotar la consola
 dimension_y = 20#1000
-resolucion = 0.05 #celdas de 10cm
+resolucion = 0.25 #celdas de 10cm
 
 x = 0
 y = 0
@@ -27,8 +27,8 @@ def my_timer_callback(self, event=None):
 
     str = "pos x={}, pos y={}, pot={}".format(y,x,potencia)
     
-    grilla.agregar_punto(potencia, x, y)
-    grilla.graficar()
+    grilla.agregar_punto(-potencia, y, x)
+    #grilla.graficar()
     aux = grilla.grilla2occupancy_grid()
     rospy.loginfo(aux)
     map_pub.publish(aux)

@@ -12,13 +12,13 @@ class Grilla:
         # self.grilla = np.array(([-float('inf') for i in range(dimension_x)],\
         #                         [-float('inf') for i in range(dimension_y)]))
         self.grilla = np.ndarray((dimension_x, dimension_y), buffer=np.zeros((dimension_x, dimension_y), dtype=np.int), dtype=np.int)
-        self.grilla.fill(-90)
+        self.grilla.fill(100)
 
     def agregar_punto(self, potencia, x, y):
         i, j = posicion2indice(x, y, self.resolucion)
         #if (i, j) != (i_anterior, j_anterior):
-        if (i < self.dimension_x) and (j < self.dimension_y):
-        #if ((i > 0) and (i < self.dimension_x)) and ((j > 0) and (j < self.dimension_y)):  POR QUE ESTO NO ANDA??
+        #if (i < self.dimension_x) and (j < self.dimension_y):
+        if ((i >= 0) and (i < self.dimension_x)) and ((j >= 0) and (j < self.dimension_y)):  #POR QUE ESTO NO ANDA??
             self.grilla[i, j] = potencia
         #    (i_anterior, j_anterior) = (i, j)
 
