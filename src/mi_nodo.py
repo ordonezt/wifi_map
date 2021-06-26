@@ -4,12 +4,12 @@ from nav_msgs.msg import Odometry
 from std_msgs.msg import String
 from gazebo_wifi_plugin.msg import ReceiverReport
 import numpy as np
-from grilla_lib import Grilla
+from grilla_lib import Grilla, condicion_finalizacion
 from nav_msgs.msg import OccupancyGrid
 
 # para correr simulacion: LASER=rplidar RVIZ=true LOCALIZATION=amcl roslaunch ca_gazebo mapa
 # para correr paquete: "rosrun mi_paquete_2 mi_nodo.py"
-
+# para correr comando de velocidades por teclado: rosrun teleop_twist_keyboard teleop_twist_keyboard.py cmd_vel:=/create1/cmd_vel/out
 # variables globales
 dimension_x = 20#1000 Puse 3 para no explotar la consola
 dimension_y = 20#1000
@@ -35,6 +35,10 @@ def my_timer_callback(self, event=None):
     
     rospy.loginfo(str)
     mi_pub.publish(String(str))
+
+    if(condicion_finalizacion(grilla) == True):
+        grilla.graficar()
+        rospy.signal_shutdown("Mapa terminado!")
 
 def callback_pos(msg):
     global x,y

@@ -2,6 +2,9 @@ import numpy as np
 from nav_msgs.msg import OccupancyGrid
 import matplotlib.pyplot as plt
 
+POTENCIA_MAXIMA = -10#dBm
+POTENCIA_MINIMA = -90#dBm
+
 class Grilla:
 
     def __init__(self, dimension_x, dimension_y, resolucion):
@@ -36,16 +39,31 @@ class Grilla:
         return mapa_msg
     
     def graficar(self):
-        if np.sum(np.invert(self.grilla == -90)) >= 20:
-            plt.imshow(self.grilla)
-            plt.show()
+        grilla_potencia = (self.grilla / 100) * (POTENCIA_MINIMA - POTENCIA_MAXIMA) + POTENCIA_MAXIMA
+        print(grilla_potencia)
+        print('Graficando...')
+        titulo = 'Mapa de Wifi'
+        nombre_archivo = raw_input('Ingrese un nombre para la imagen: ')
+        ruta_archivo = nombre_archivo
+        
+        fig = plt.figure()
+        fig.canvas.manager.set_window_title(nombre_archivo)
+        ax = plt.axes()
+        ax.set_title(titulo)
+        im = plt.imshow(grilla_potencia, interpolation='bicubic', vmin=POTENCIA_MINIMA, vmax=POTENCIA_MAXIMA, cmap=plt.cm.Greens)
+        cbar = ax.figure.colorbar(im, ax=ax)
+        cbar.ax.set_ylabel('Potencia [dBm]', labelpad=10, va="bottom")
+
+        im.figure.savefig(ruta_archivo)
+
+        plt.show()
 
 def posicion2indice(x, y, resolucion):
     return (int(x // resolucion), int(y // resolucion))
 
 def potencia2probability (potencia):
-    potencia_max=-10  #potencia maxima representable en dBm
-    potencia_min=-90 #potencia minima representable en dBm
+    potencia_max=POTENCIA_MAXIMA  #potencia maxima representable en dBm
+    potencia_min=POTENCIA_MINIMA #potencia minima representable en dBm
     rango_potencia = potencia_max - potencia_min
     #trunco los valores posibles de potencia
     if (potencia>potencia_max):
@@ -60,3 +78,6 @@ def potencia2probability (potencia):
     potencia= (potencia/rango_potencia) *100
     potencia=100-potencia
     return potencia
+
+def condicion_finalizacion(grilla):
+    return np.sum(np.invert(grilla.grilla == 100)) >= 20
